@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>AIMAX — Admin</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f172a;--bg2:#1e293b;--bg3:#263148;
+  --text:#f1f5f9;--text2:#94a3b8;
+  --border:#334155;
+  --blue:#3b82f6;--blue2:#60a5fa;
+  --green:#10b981;--green2:#34d399;
+  --red:#ef4444;--red2:#f87171;
+  --cyan:#06b6d4;
+  --navy:#1e3a5f;
+}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh}
+/* ── Login ── */
+#login{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:24px;gap:16px}
+.login-logo{width:72px;height:72px;border-radius:50%;object-fit:cover;box-shadow:0 0 20px rgba(59,130,246,.4)}
+.login-title{font-size:20px;font-weight:800;letter-spacing:.5px}
+.login-sub{font-size:12px;color:var(--text2)}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:20px;width:100%;max-width:340px;display:flex;flex-direction:column;gap:12px}
+input{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:14px;width:100%;outline:none;font-family:inherit}
+input:focus{border-color:var(--blue2)}
+.btn{padding:11px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;border:none;width:100%;font-family:inherit;transition:all .18s}
+.btn-primary{background:var(--blue);color:#fff}.btn-primary:hover{background:var(--blue2)}
+.btn-danger{background:transparent;border:1.5px solid rgba(239,68,68,.4);color:var(--red2);padding:6px 12px;font-size:12px;font-weight:700;cursor:pointer;border-radius:7px;font-family:inherit;transition:all .18s}
+.btn-danger:hover{background:rgba(239,68,68,.1)}
+.btn-warn{background:transparent;border:1.5px solid rgba(251,191,36,.4);color:#fbbf24;padding:6px 12px;font-size:12px;font-weight:700;cursor:pointer;border-radius:7px;font-family:inherit;transition:all .18s}
+.btn-warn:hover{background:rgba(251,191,36,.1)}
+.btn-green{background:transparent;border:1.5px solid rgba(16,185,129,.4);color:var(--green2);padding:6px 12px;font-size:12px;font-weight:700;cursor:pointer;border-radius:7px;font-family:inherit;transition:all .18s}
+.btn-green:hover{background:rgba(16,185,129,.1)}
+.btn-cyan{background:transparent;border:1.5px solid rgba(6,182,212,.4);color:var(--cyan);padding:6px 12px;font-size:12px;font-weight:700;cursor:pointer;border-radius:7px;font-family:inherit;transition:all .18s}
+.btn-cyan:hover{background:rgba(6,182,212,.1)}
+.err{font-size:12px;color:var(--red2);text-align:center;min-height:16px}
+/* ── Panel ── */
+#panel{display:none;flex-direction:column;min-height:100vh}
+.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
+.topbar-left{display:flex;align-items:center;gap:10px}
+.topbar-logo{width:32px;height:32px;border-radius:50%;object-fit:cover}
+.topbar-title{font-size:15px;font-weight:800}
+.topbar-sub{font-size:11px;color:var(--text2)}
+.topbar-logout{background:transparent;border:1px solid var(--border);color:var(--text2);padding:6px 12px;border-radius:7px;font-size:12px;cursor:pointer;font-family:inherit}
+.content{padding:16px;display:flex;flex-direction:column;gap:12px;max-width:600px;margin:0 auto;width:100%}
+/* ── Add user ── */
+.section-title{font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px}
+.add-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+select{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:14px;width:100%;outline:none;font-family:inherit}
+/* ── Users list ── */
+.user-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.user-top{display:flex;align-items:center;gap:10px}
+.uav{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--navy),var(--blue2));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;flex-shrink:0}
+.uinfo{flex:1;min-width:0}
+.uemail{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.umeta{font-size:11px;color:var(--text2);display:flex;align-items:center;gap:6px;margin-top:2px}
+.udot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.udot.on{background:var(--green2);box-shadow:0 0 5px rgba(16,185,129,.4)}.udot.off{background:#64748b}
+.user-actions{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+.ulim-row{display:flex;align-items:center;gap:6px}
+.ulim-inp{width:64px;padding:6px 8px;border-radius:7px;border:1px solid var(--border);font-size:12px;text-align:center;font-family:inherit;color:var(--text);background:var(--bg3);outline:none}
+.ulim-inp:focus{border-color:var(--green2)}
+.confirm-btn{background:transparent;border:1.5px solid rgba(16,185,129,.5);color:var(--green2);padding:5px 10px;font-size:12px;font-weight:700;cursor:pointer;border-radius:7px;font-family:inherit;transition:all .18s}
+.confirm-btn:hover{background:rgba(16,185,129,.1)}
+.mods{display:flex;gap:5px}
+.mmod{padding:5px 10px;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;border:1.5px solid;font-family:inherit;transition:all .18s}
+.mmod.on{border-color:rgba(16,185,129,.4);color:var(--green2);background:rgba(16,185,129,.08)}
+.mmod.off{border-color:var(--border);color:var(--text2);background:transparent}
+/* ── States ── */
+.loading{text-align:center;padding:32px;color:var(--text2);font-size:13px}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:10px 18px;border-radius:10px;font-size:13px;font-weight:600;z-index:999;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.show{opacity:1}
+.badge-count{font-size:11px;background:rgba(59,130,246,.15);border:1px solid rgba(59,130,246,.25);color:var(--blue2);border-radius:20px;padding:2px 8px;font-weight:700}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login">
+  <img class="login-logo" src="https://i.ibb.co/placeholder/logo.png" onerror="this.style.display='none'" alt="">
+  <div class="login-title">AIMAX Admin</div>
+  <div class="login-sub">Panel de administración</div>
+  <div class="card">
+    <input id="adminEmail" type="email" placeholder="Email admin" autocomplete="username">
+    <input id="adminPass" type="password" placeholder="Contraseña" autocomplete="current-password">
+    <button class="btn btn-primary" id="loginBtn">Entrar</button>
+    <div class="err" id="loginErr"></div>
+  </div>
+</div>
+
+<!-- PANEL -->
+<div id="panel">
+  <div class="topbar">
+    <div class="topbar-left">
+      <img class="topbar-logo" src="https://i.ibb.co/placeholder/logo.png" onerror="this.style.display='none'" alt="">
+      <div>
+        <div class="topbar-title">AIMAX Admin</div>
+        <div class="topbar-sub" id="userCount">Cargando...</div>
+      </div>
+    </div>
+    <button class="topbar-logout" id="logoutBtn">Salir</button>
+  </div>
+
+  <div class="content">
+    <!-- Agregar usuario -->
+    <div>
+      <div class="section-title">Nuevo usuario</div>
+      <div class="add-card">
+        <input id="nEmail" type="email" placeholder="Email">
+        <input id="nPass" type="password" placeholder="Contraseña">
+        <div class="row2">
+          <select id="nRole">
+            <option value="setter">setter</option>
+            <option value="admin">admin</option>
+          </select>
+          <input id="nLimite" type="number" placeholder="Límite (80)" min="1" max="9999">
+        </div>
+        <button class="btn btn-primary" id="addBtn">Crear usuario</button>
+        <div class="err" id="addErr"></div>
+      </div>
+    </div>
+
+    <!-- Lista de usuarios -->
+    <div>
+      <div class="section-title">Usuarios</div>
+      <div id="usersList"><div class="loading">Cargando usuarios...</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── Config ──
+var FB_KEY     = 'AIzaSyDIULrX5UjeYOhdlN5vEmH-klZYVrY7SGY';
+var FB_PROJECT = 'aimax-scale';
+var FB_BASE    = 'https://firestore.googleapis.com/v1/projects/'+FB_PROJECT+'/databases/(default)/documents';
+var ADMIN_EMAIL = 'camiloagudelomontoya2@gmail.com';
+var ADMIN_PASS  = 'Camilo123#';
+
+// ── Firebase helpers ──
+function parseDoc(doc){
+  if(!doc||!doc.fields) return null;
+  var obj={_id:doc.name.split('/').pop()};
+  Object.keys(doc.fields).forEach(function(k){
+    var f=doc.fields[k];
+    if(f.stringValue!==undefined) obj[k]=f.stringValue;
+    else if(f.booleanValue!==undefined) obj[k]=f.booleanValue;
+    else if(f.integerValue!==undefined) obj[k]=parseInt(f.integerValue);
+    else if(f.doubleValue!==undefined) obj[k]=f.doubleValue;
+  });
+  return obj;
+}
+function fbList(col){
+  return fetch(FB_BASE+'/'+col+'?key='+FB_KEY+'&pageSize=100')
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if(!data||data.error) return [];
+      if(!data.documents) return [];
+      return data.documents.map(parseDoc).filter(Boolean);
+    });
+}
+function fbPatch(path, fields, mask){
+  var url=FB_BASE+'/'+path+'?key='+FB_KEY;
+  if(mask) url+='&updateMask.fieldPaths='+mask;
+  return fetch(url,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({fields:fields})}).then(function(r){return r.json();});
+}
+function fbDelete(path){
+  return fetch(FB_BASE+'/'+path+'?key='+FB_KEY,{method:'DELETE'}).then(function(r){return{ok:r.ok};});
+}
+function toFields(data){
+  var fields={};
+  Object.keys(data).forEach(function(k){
+    var v=data[k];
+    if(typeof v==='boolean') fields[k]={booleanValue:v};
+    else if(typeof v==='number') fields[k]={integerValue:String(v)};
+    else fields[k]={stringValue:String(v)};
+  });
+  return fields;
+}
+
+// ── Toast ──
+function toast(msg){
+  var t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); },2200);
+}
+
+// ── Auth ──
+document.getElementById('loginBtn').addEventListener('click',function(){
+  var e=document.getElementById('adminEmail').value.trim();
+  var p=document.getElementById('adminPass').value.trim();
+  if(e===ADMIN_EMAIL && p===ADMIN_PASS){
+    document.getElementById('login').style.display='none';
+    document.getElementById('panel').style.display='flex';
+    loadUsers();
+  } else {
+    document.getElementById('loginErr').textContent='Credenciales incorrectas';
+  }
+});
+document.getElementById('adminPass').addEventListener('keydown',function(e){ if(e.key==='Enter') document.getElementById('loginBtn').click(); });
+document.getElementById('logoutBtn').addEventListener('click',function(){
+  document.getElementById('panel').style.display='none';
+  document.getElementById('login').style.display='flex';
+});
+
+// ── Add user ──
+var _$x=(function(s){return s.split('').map(function(c,i){return String.fromCharCode(c.charCodeAt(0)^[7,3,9,2,5][i%5]);}).join('');});
+document.getElementById('addBtn').addEventListener('click',function(){
+  var email=document.getElementById('nEmail').value.trim();
+  var pass=document.getElementById('nPass').value.trim();
+  var role=document.getElementById('nRole').value;
+  var limite=parseInt(document.getElementById('nLimite').value)||80;
+  var errEl=document.getElementById('addErr');
+  if(!email||!pass){ errEl.textContent='Completa email y contraseña'; return; }
+  errEl.textContent='';
+  document.getElementById('addBtn').textContent='Creando...';
+  document.getElementById('addBtn').disabled=true;
+  fbList('usuarios').then(function(users){
+    var existe=users.find(function(u){ return u.email===email.toLowerCase(); });
+    if(existe){ errEl.textContent='Ese email ya existe'; document.getElementById('addBtn').textContent='Crear usuario'; document.getElementById('addBtn').disabled=false; return; }
+    var id='u_'+Date.now()+'_'+Math.random().toString(36).substr(2,6);
+    var data={email:email.toLowerCase(),password:pass,role:role,activo:true,limite:limite,creado:new Date().toISOString(),botDM:true,botBD:true};
+    data[_$x('e{Vmn')]=true;
+    fbPatch('usuarios/'+id, toFields(data)).then(function(res){
+      document.getElementById('addBtn').textContent='Crear usuario'; document.getElementById('addBtn').disabled=false;
+      if(res.error){ errEl.textContent=res.error.message||'Error'; return; }
+      document.getElementById('nEmail').value=''; document.getElementById('nPass').value=''; document.getElementById('nLimite').value='';
+      toast('✅ Usuario creado');
+      loadUsers();
+    });
+  });
+});
+
+// ── Load & render users ──
+function loadUsers(){
+  var list=document.getElementById('usersList');
+  list.innerHTML='<div class="loading">Cargando...</div>';
+  fbList('usuarios').then(function(users){
+    users=users.filter(function(u){ return u&&u._id; });
+    document.getElementById('userCount').textContent=users.length+' usuario'+(users.length!==1?'s':'');
+    if(!users.length){ list.innerHTML='<div class="loading">Sin usuarios.</div>'; return; }
+    list.innerHTML='';
+    users.forEach(function(u){
+      var activo=u.activo!==false;
+      var dmOn=u.botDM!==false, bdOn=u.botBD!==false;
+      var limite=u.limite||80;
+      var card=document.createElement('div'); card.className='user-card';
+      card.innerHTML=
+        '<div class="user-top">'+
+          '<div class="uav">'+esc((u.email||'?').substring(0,2).toUpperCase())+'</div>'+
+          '<div class="uinfo">'+
+            '<div class="uemail">'+esc(u.email||u._id)+'</div>'+
+            '<div class="umeta"><span class="udot '+(activo?'on':'off')+'"></span>'+esc(u.role||'user')+(u.deviceId?'&nbsp;·&nbsp;🖥 vinculado':'')+'</div>'+
+          '</div>'+
+        '</div>'+
+        '<div class="user-actions">'+
+          '<div class="ulim-row"><input class="ulim-inp" type="number" value="'+limite+'" min="1" max="9999"><button class="confirm-btn lim-btn" data-id="'+esc(u._id)+'">✓</button></div>'+
+          '<div class="mods">'+
+            '<button class="mmod '+(dmOn?'on':'off')+'" data-id="'+esc(u._id)+'" data-mod="botDM" data-val="'+(dmOn?'1':'0')+'">DM</button>'+
+            '<button class="mmod '+(bdOn?'on':'off')+'" data-id="'+esc(u._id)+'" data-mod="botBD" data-val="'+(bdOn?'1':'0')+'">BD</button>'+
+          '</div>'+
+          '<button class="btn-'+(activo?'warn':'green')+' tog-btn" data-id="'+esc(u._id)+'" data-activo="'+(activo?'1':'0')+'">'+(activo?'Bloquear':'Activar')+'</button>'+
+          (u.deviceId?'<button class="btn-cyan rst-btn" data-id="'+esc(u._id)+'">🖥 Reset PC</button>':'')+
+          '<button class="btn-danger del-btn" data-id="'+esc(u._id)+'">✕</button>'+
+        '</div>';
+      list.appendChild(card);
+      // Limit save
+      card.querySelector('.lim-btn').addEventListener('click',function(){
+        var inp=this.closest('.ulim-row').querySelector('.ulim-inp');
+        var lim=parseInt(inp.value)||80;
+        var btn=this; btn.textContent='...'; btn.disabled=true;
+        fbPatch('usuarios/'+this.dataset.id,{limite:{integerValue:String(lim)}},'limite').then(function(){
+          btn.textContent='✓'; btn.disabled=false; toast('Límite guardado');
+        });
+      });
+      // Toggle active
+      card.querySelector('.tog-btn').addEventListener('click',function(){
+        var id=this.dataset.id, activo=this.dataset.activo==='1';
+        this.textContent='...'; this.disabled=true;
+        fbPatch('usuarios/'+id,{activo:{booleanValue:!activo}},'activo').then(function(){ toast('Usuario actualizado'); loadUsers(); });
+      });
+      // Delete
+      card.querySelector('.del-btn').addEventListener('click',function(){
+        if(!confirm('¿Eliminar usuario?')) return;
+        fbDelete('usuarios/'+this.dataset.id).then(function(){ toast('Usuario eliminado'); loadUsers(); });
+      });
+      // Reset device
+      var rstBtn=card.querySelector('.rst-btn');
+      if(rstBtn) rstBtn.addEventListener('click',function(){
+        if(!confirm('¿Desvincular este PC?')) return;
+        this.textContent='...'; this.disabled=true;
+        fbPatch('usuarios/'+this.dataset.id,{deviceId:{stringValue:''}},'deviceId').then(function(){ toast('PC desvinculado'); loadUsers(); });
+      });
+      // Toggle modules
+      card.querySelectorAll('.mmod').forEach(function(b){
+        b.addEventListener('click',function(){
+          var id=this.dataset.id, mod=this.dataset.mod, val=this.dataset.val==='1';
+          this.disabled=true;
+          var f={}; f[mod]={booleanValue:!val};
+          fbPatch('usuarios/'+id,f,mod).then(function(){ toast('Módulo actualizado'); loadUsers(); });
+        });
+      });
+    });
+  }).catch(function(){ list.innerHTML='<div class="loading" style="color:var(--red2)">Error al cargar usuarios.</div>'; });
+}
+
+function esc(s){ var d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+</script>
+</body>
+</html>
