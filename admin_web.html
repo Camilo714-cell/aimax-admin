@@ -223,7 +223,7 @@ document.getElementById('addBtn').addEventListener('click',function(){
     var existe=users.find(function(u){ return u.email===email.toLowerCase(); });
     if(existe){ errEl.textContent='Ese email ya existe'; document.getElementById('addBtn').textContent='Crear usuario'; document.getElementById('addBtn').disabled=false; return; }
     var id='u_'+Date.now()+'_'+Math.random().toString(36).substr(2,6);
-    var data={email:email.toLowerCase(),password:pass,role:role,activo:true,limite:limite,creado:new Date().toISOString(),botDM:true,botBD:true};
+    var data={email:email.toLowerCase(),password:pass,role:role,activo:true,limite:limite,creado:new Date().toISOString(),botDM:true,botBD:true,botEnrich:true};
     data[_$x('e{Vmn')]=true;
     fbPatch('usuarios/'+id, toFields(data)).then(function(res){
       document.getElementById('addBtn').textContent='Crear usuario'; document.getElementById('addBtn').disabled=false;
@@ -246,7 +246,7 @@ function loadUsers(){
     list.innerHTML='';
     users.forEach(function(u){
       var activo=u.activo!==false;
-      var dmOn=u.botDM!==false, bdOn=u.botBD!==false;
+      var dmOn=u.botDM!==false, bdOn=u.botBD!==false, enrOn=u.botEnrich!==false;
       var limite=u.limite||80;
       var card=document.createElement('div'); card.className='user-card';
       card.innerHTML=
@@ -262,6 +262,7 @@ function loadUsers(){
           '<div class="mods">'+
             '<button class="mmod '+(dmOn?'on':'off')+'" data-id="'+esc(u._id)+'" data-mod="botDM" data-val="'+(dmOn?'1':'0')+'">DM</button>'+
             '<button class="mmod '+(bdOn?'on':'off')+'" data-id="'+esc(u._id)+'" data-mod="botBD" data-val="'+(bdOn?'1':'0')+'">BD</button>'+
+            '<button class="mmod '+(enrOn?'on':'off')+'" data-id="'+esc(u._id)+'" data-mod="botEnrich" data-val="'+(enrOn?'1':'0')+'">Enr</button>'+
           '</div>'+
           '<button class="btn-'+(activo?'warn':'green')+' tog-btn" data-id="'+esc(u._id)+'" data-activo="'+(activo?'1':'0')+'">'+(activo?'Bloquear':'Activar')+'</button>'+
           (u.deviceId?'<button class="btn-cyan rst-btn" data-id="'+esc(u._id)+'">🖥 Reset PC</button>':'')+
