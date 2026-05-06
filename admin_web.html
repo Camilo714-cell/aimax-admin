@@ -262,7 +262,7 @@ function loadUsers(){
           '<div class="mods">'+
             '<button class="mmod '+(dmOn?'on':'off')+'" data-id="'+esc(u._id)+'" data-mod="botDM" data-val="'+(dmOn?'1':'0')+'">DM</button>'+
             '<button class="mmod '+(bdOn?'on':'off')+'" data-id="'+esc(u._id)+'" data-mod="botBD" data-val="'+(bdOn?'1':'0')+'">BD</button>'+
-            '<button class="mmod '+(enrOn?'on':'off')+'" data-id="'+esc(u._id)+'" data-mod="botEnrich" data-val="'+(enrOn?'1':'0')+'">Enr</button>'+
+            '<button class="mmod '+(enrOn?'on':'off')+'" data-id="'+esc(u._id)+'" data-mod="botEnrich" data-val="'+(enrOn?'1':'0')+'" title="Enriquecer leads">BD+</button>'+
           '</div>'+
           '<button class="btn-'+(activo?'warn':'green')+' tog-btn" data-id="'+esc(u._id)+'" data-activo="'+(activo?'1':'0')+'">'+(activo?'Bloquear':'Activar')+'</button>'+
           (u.deviceId?'<button class="btn-cyan rst-btn" data-id="'+esc(u._id)+'">🖥 Reset PC</button>':'')+
