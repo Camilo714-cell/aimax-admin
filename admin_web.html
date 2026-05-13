@@ -3,77 +3,195 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="color-scheme" content="light dark">
 <title>AIMAX — Admin</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
+
+/* ═══ TEMA OSCURO (default) ═══ */
 :root{
   --bg:#0f172a;--bg2:#1e293b;--bg3:#263148;
-  --text:#f1f5f9;--text2:#94a3b8;
-  --border:#334155;
-  --blue:#3b82f6;--blue2:#60a5fa;
+  --text:#f1f5f9;--text2:#94a3b8;--text3:#64748b;
+  --border:#334155;--border2:#475569;
+  --blue:#3b82f6;--blue2:#60a5fa;--blue3:#93c5fd;
   --green:#10b981;--green2:#34d399;
   --red:#ef4444;--red2:#f87171;
+  --orange:#f59e0b;--purple:#a78bfa;
   --cyan:#06b6d4;
   --navy:#1e3a5f;
+  --shadow:0 4px 14px rgba(0,0,0,.25);
+  --hero-grad:linear-gradient(135deg,#0f172a 0%,#1e3a8a 100%);
+  --card-bg:var(--bg2);
+  --avatar-shadow:rgba(0,0,0,.3);
 }
-body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh}
+
+/* ═══ TEMA CLARO (auto) ═══ */
+@media (prefers-color-scheme: light){
+  :root{
+    --bg:#f0f5ff;--bg2:#ffffff;--bg3:#f1f5f9;
+    --text:#0f172a;--text2:#334155;--text3:#64748b;
+    --border:#d5e2f8;--border2:#b8cff4;
+    --blue:#1d4ed8;--blue2:#2563eb;--blue3:#3b82f6;
+    --green:#059669;--green2:#10b981;
+    --red:#dc2626;--red2:#ef4444;
+    --orange:#d97706;--purple:#7c3aed;
+    --cyan:#0891b2;
+    --navy:#1e3a8a;
+    --shadow:0 1px 3px rgba(14,30,65,.07),0 4px 16px rgba(14,30,65,.05);
+    --hero-grad:linear-gradient(135deg,#1e3a8a 0%,#2563eb 100%);
+    --card-bg:#ffffff;
+    --avatar-shadow:rgba(37,99,235,.15);
+  }
+}
+
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;transition:background .2s,color .2s}
+
 /* ── Login ── */
 #login{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:24px;gap:16px}
 .login-logo{width:72px;height:72px;border-radius:50%;object-fit:cover;box-shadow:0 0 20px rgba(59,130,246,.4)}
 .login-title{font-size:20px;font-weight:800;letter-spacing:.5px}
 .login-sub{font-size:12px;color:var(--text2)}
-.card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:20px;width:100%;max-width:340px;display:flex;flex-direction:column;gap:12px}
-input{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:14px;width:100%;outline:none;font-family:inherit}
-input:focus{border-color:var(--blue2)}
+.card{background:var(--card-bg);border:1px solid var(--border);border-radius:14px;padding:20px;width:100%;max-width:340px;display:flex;flex-direction:column;gap:12px;box-shadow:var(--shadow)}
+input,select{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:14px;width:100%;outline:none;font-family:inherit;transition:border-color .15s}
+input:focus,select:focus{border-color:var(--blue2)}
 .btn{padding:11px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;border:none;width:100%;font-family:inherit;transition:all .18s}
-.btn-primary{background:var(--blue);color:#fff}.btn-primary:hover{background:var(--blue2)}
-.btn-danger{background:transparent;border:1.5px solid rgba(239,68,68,.4);color:var(--red2);padding:6px 12px;font-size:12px;font-weight:700;cursor:pointer;border-radius:7px;font-family:inherit;transition:all .18s}
-.btn-danger:hover{background:rgba(239,68,68,.1)}
-.btn-warn{background:transparent;border:1.5px solid rgba(251,191,36,.4);color:#fbbf24;padding:6px 12px;font-size:12px;font-weight:700;cursor:pointer;border-radius:7px;font-family:inherit;transition:all .18s}
-.btn-warn:hover{background:rgba(251,191,36,.1)}
-.btn-green{background:transparent;border:1.5px solid rgba(16,185,129,.4);color:var(--green2);padding:6px 12px;font-size:12px;font-weight:700;cursor:pointer;border-radius:7px;font-family:inherit;transition:all .18s}
-.btn-green:hover{background:rgba(16,185,129,.1)}
-.btn-cyan{background:transparent;border:1.5px solid rgba(6,182,212,.4);color:var(--cyan);padding:6px 12px;font-size:12px;font-weight:700;cursor:pointer;border-radius:7px;font-family:inherit;transition:all .18s}
-.btn-cyan:hover{background:rgba(6,182,212,.1)}
+.btn-primary{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff;box-shadow:0 4px 14px rgba(37,99,235,.25)}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(37,99,235,.35)}
 .err{font-size:12px;color:var(--red2);text-align:center;min-height:16px}
+
 /* ── Panel ── */
 #panel{display:none;flex-direction:column;min-height:100vh}
-.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
+.topbar{background:var(--card-bg);border-bottom:1px solid var(--border);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;box-shadow:var(--shadow)}
 .topbar-left{display:flex;align-items:center;gap:10px}
 .topbar-logo{width:32px;height:32px;border-radius:50%;object-fit:cover}
 .topbar-title{font-size:15px;font-weight:800}
 .topbar-sub{font-size:11px;color:var(--text2)}
-.topbar-logout{background:transparent;border:1px solid var(--border);color:var(--text2);padding:6px 12px;border-radius:7px;font-size:12px;cursor:pointer;font-family:inherit}
-.content{padding:16px;display:flex;flex-direction:column;gap:12px;max-width:600px;margin:0 auto;width:100%}
-/* ── Add user ── */
-.section-title{font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px}
-.add-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.topbar-logout{background:transparent;border:1px solid var(--border);color:var(--text2);padding:6px 12px;border-radius:7px;font-size:12px;cursor:pointer;font-family:inherit;transition:all .15s}
+.topbar-logout:hover{border-color:var(--red);color:var(--red)}
+.content{padding:16px;display:flex;flex-direction:column;gap:14px;max-width:600px;margin:0 auto;width:100%}
+
+/* ── Stats cards ── */
+.stats-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.stat-card{background:var(--card-bg);border:1.5px solid var(--border);border-radius:13px;padding:12px 11px;position:relative;overflow:hidden;box-shadow:var(--shadow)}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--c);border-radius:13px 13px 0 0}
+.stat-card.blue  {--c:var(--blue2)}
+.stat-card.green {--c:var(--green2)}
+.stat-card.red   {--c:var(--red2)}
+.stat-lbl{font-size:9px;font-weight:700;color:var(--text2);letter-spacing:.8px;text-transform:uppercase;margin-bottom:5px;display:flex;align-items:center;gap:5px}
+.stat-lbl::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--c)}
+.stat-val{font-size:24px;font-weight:800;line-height:1;letter-spacing:-.5px;color:var(--c);font-variant-numeric:tabular-nums}
+
+/* ── Add user form ── */
+.section-title{font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;display:flex;align-items:center;gap:7px}
+.section-title::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--blue2)}
+.add-card{background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px;box-shadow:var(--shadow)}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-select{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-size:14px;width:100%;outline:none;font-family:inherit}
-/* ── Users list ── */
-.user-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px}
-.user-top{display:flex;align-items:center;gap:10px}
-.uav{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--navy),var(--blue2));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;flex-shrink:0}
+
+/* ── Filter pills ── */
+.pills{display:flex;gap:5px;margin-bottom:10px;flex-wrap:wrap}
+.pill{padding:6px 13px;background:var(--card-bg);border:1.5px solid var(--border);border-radius:99px;color:var(--text3);font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s}
+.pill:hover{border-color:var(--border2);color:var(--text2)}
+.pill.active{background:rgba(59,130,246,.12);border-color:var(--blue2);color:var(--blue2)}
+.pill .count{margin-left:5px;background:rgba(0,0,0,.15);border-radius:99px;padding:1px 7px;font-size:10px;font-weight:800}
+.pill.active .count{background:rgba(59,130,246,.2)}
+@media (prefers-color-scheme: light){
+  .pill .count{background:rgba(0,0,0,.06)}
+  .pill.active{background:#dbeafe}
+  .pill.active .count{background:rgba(29,78,216,.15)}
+}
+
+/* ── User cards (clickable) ── */
+.users-list{display:flex;flex-direction:column;gap:7px}
+.user-card{background:var(--card-bg);border:1.5px solid var(--border);border-radius:11px;padding:11px 12px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:all .15s;box-shadow:var(--shadow)}
+.user-card:hover{border-color:var(--blue2);transform:translateY(-1px)}
+.user-card.blocked{opacity:.55}
+.uav{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;flex-shrink:0;letter-spacing:.2px;box-shadow:0 2px 8px var(--avatar-shadow)}
+.uav.c1{background:linear-gradient(135deg,#1d4ed8,#3b82f6)}
+.uav.c2{background:linear-gradient(135deg,#7c3aed,#a78bfa)}
+.uav.c3{background:linear-gradient(135deg,#059669,#10b981)}
+.uav.c4{background:linear-gradient(135deg,#ea580c,#f97316)}
+.uav.c5{background:linear-gradient(135deg,#0891b2,#06b6d4)}
 .uinfo{flex:1;min-width:0}
-.uemail{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.umeta{font-size:11px;color:var(--text2);display:flex;align-items:center;gap:6px;margin-top:2px}
-.udot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-.udot.on{background:var(--green2);box-shadow:0 0 5px rgba(16,185,129,.4)}.udot.off{background:#64748b}
-.user-actions{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
-.ulim-row{display:flex;align-items:center;gap:6px}
-.ulim-inp{width:64px;padding:6px 8px;border-radius:7px;border:1px solid var(--border);font-size:12px;text-align:center;font-family:inherit;color:var(--text);background:var(--bg3);outline:none}
-.ulim-inp:focus{border-color:var(--green2)}
-.confirm-btn{background:transparent;border:1.5px solid rgba(16,185,129,.5);color:var(--green2);padding:5px 10px;font-size:12px;font-weight:700;cursor:pointer;border-radius:7px;font-family:inherit;transition:all .18s}
-.confirm-btn:hover{background:rgba(16,185,129,.1)}
-.mods{display:flex;gap:5px}
-.mmod{padding:5px 10px;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;border:1.5px solid;font-family:inherit;transition:all .18s}
-.mmod.on{border-color:rgba(16,185,129,.4);color:var(--green2);background:rgba(16,185,129,.08)}
-.mmod.off{border-color:var(--border);color:var(--text2);background:transparent}
+.uemail{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-.1px;color:var(--text)}
+.umeta{display:flex;align-items:center;gap:6px;margin-top:3px}
+.ubadge{display:inline-flex;align-items:center;font-size:10px;font-weight:700;padding:1px 8px;border-radius:99px;letter-spacing:.2px}
+.ubadge.admin{background:rgba(167,139,250,.15);color:var(--purple);border:1px solid rgba(167,139,250,.3)}
+.ubadge.user{background:rgba(96,165,250,.12);color:var(--blue2);border:1px solid rgba(96,165,250,.25)}
+.utime{font-size:10px;color:var(--text3);font-weight:500}
+.uright{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.ustat-num{font-size:13px;font-weight:800;color:var(--text2);font-variant-numeric:tabular-nums;text-align:right;line-height:1.1}
+.ustat-lbl{font-size:9px;color:var(--text3);font-weight:600;text-align:right}
+.udot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.udot.on{background:var(--green2);box-shadow:0 0 5px rgba(16,185,129,.5)}
+.udot.off{background:var(--text3)}
+
 /* ── States ── */
-.loading{text-align:center;padding:32px;color:var(--text2);font-size:13px}
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:10px 18px;border-radius:10px;font-size:13px;font-weight:600;z-index:999;opacity:0;transition:opacity .2s;pointer-events:none}
+.loading{text-align:center;padding:32px;color:var(--text3);font-size:13px;font-weight:500}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--card-bg);border:1px solid var(--border);color:var(--text);padding:10px 18px;border-radius:10px;font-size:13px;font-weight:600;z-index:999;opacity:0;transition:opacity .2s;pointer-events:none;box-shadow:0 8px 24px rgba(0,0,0,.2)}
 .toast.show{opacity:1}
-.badge-count{font-size:11px;background:rgba(59,130,246,.15);border:1px solid rgba(59,130,246,.25);color:var(--blue2);border-radius:20px;padding:2px 8px;font-weight:700}
+
+/* ═══ USER DETAIL MODAL ═══ */
+.udm{position:fixed;inset:0;background:rgba(15,23,42,.6);backdrop-filter:blur(4px);display:none;align-items:flex-start;justify-content:center;z-index:1000;padding:16px;overflow-y:auto}
+.udm.open{display:flex}
+.udm-box{background:var(--card-bg);border-radius:14px;width:100%;max-width:440px;box-shadow:0 20px 60px rgba(0,0,0,.4);overflow:hidden;animation:udmIn .25s cubic-bezier(.4,0,.2,1);margin:auto 0}
+@keyframes udmIn{from{opacity:0;transform:translateY(-10px) scale(.96)}to{opacity:1;transform:none}}
+.udm-hero{background:var(--hero-grad);padding:18px 18px 14px;color:#fff;position:relative}
+.udm-close{position:absolute;top:12px;right:12px;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.15);border:none;color:#fff;font-size:14px;cursor:pointer;transition:background .18s;display:flex;align-items:center;justify-content:center}
+.udm-close:hover{background:rgba(255,255,255,.25)}
+.udm-av{width:58px;height:58px;border-radius:50%;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:#fff;margin-bottom:10px;letter-spacing:.3px}
+.udm-mail{font-size:15px;font-weight:700;letter-spacing:-.2px;word-break:break-all;line-height:1.3}
+.udm-meta{display:flex;align-items:center;gap:8px;margin-top:6px;flex-wrap:wrap}
+.udm-meta .ubadge{background:rgba(255,255,255,.2);border-color:rgba(255,255,255,.3);color:#fff}
+.udm-status{font-size:10px;color:rgba(255,255,255,.9);font-weight:600;display:flex;align-items:center;gap:4px}
+.udm-status::before{content:'';width:6px;height:6px;border-radius:50%;background:#4ade80;box-shadow:0 0 6px #4ade80}
+.udm-status.off::before{background:#fca5a5;box-shadow:none}
+.udm-body{padding:16px}
+.udm-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px}
+.udm-stat{background:var(--bg3);border:1px solid var(--border);border-radius:9px;padding:10px 8px;text-align:center}
+.udm-stat-val{font-size:20px;font-weight:800;color:var(--text);line-height:1;font-variant-numeric:tabular-nums}
+.udm-stat-lbl{font-size:10px;color:var(--text2);font-weight:800;text-transform:uppercase;letter-spacing:.6px;margin-top:5px}
+.udm-stat-sub{font-size:9px;color:var(--text3);font-weight:500;margin-top:2px}
+.udm-section{margin-bottom:14px}
+.udm-section-t{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text2);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.udm-section-t::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--blue2)}
+.udm-heatmap{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.udm-day{aspect-ratio:1;border-radius:6px;background:var(--bg3);border:1px solid var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--text3);padding:2px}
+.udm-day.active{background:rgba(16,185,129,.18);border-color:rgba(16,185,129,.4);color:var(--green2)}
+.udm-day.full{background:rgba(16,185,129,.35);border-color:var(--green2);color:#fff}
+@media (prefers-color-scheme: light){
+  .udm-day.full{color:#065f46}
+}
+.udm-day-num{font-size:10px;font-weight:700;line-height:1}
+.udm-day-cnt{font-size:12px;font-weight:800;line-height:1;margin-top:3px}
+.udm-perm-row{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:9px;margin-bottom:6px}
+.udm-perm-lbl{font-size:13px;font-weight:600;color:var(--text)}
+.udm-perm-sub{font-size:10px;color:var(--text3);font-weight:500;margin-top:1px}
+.udm-switch{width:38px;height:21px;border-radius:99px;background:#475569;position:relative;cursor:pointer;border:none;transition:background .2s;flex-shrink:0}
+.udm-switch::after{content:'';position:absolute;top:2px;left:2px;width:17px;height:17px;border-radius:50%;background:#fff;transition:transform .2s;box-shadow:0 2px 4px rgba(0,0,0,.3)}
+.udm-switch.on{background:var(--green2)}
+.udm-switch.on::after{transform:translateX(17px)}
+@media (prefers-color-scheme: light){
+  .udm-switch{background:#cbd5e1}
+}
+.udm-limit-row{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:9px}
+.udm-limit-row label{flex:1;font-size:13px;color:var(--text);font-weight:600}
+.udm-limit-input{width:80px;padding:6px 10px;background:var(--card-bg);border:1.5px solid var(--border);border-radius:7px;color:var(--text);font-size:14px;font-weight:700;font-family:inherit;text-align:center;font-variant-numeric:tabular-nums;outline:none;transition:border-color .15s}
+.udm-limit-input:focus{border-color:var(--blue2);box-shadow:0 0 0 3px rgba(59,130,246,.15)}
+.udm-device{font-size:11px;color:var(--text3);font-family:monospace;background:var(--bg3);padding:7px 10px;border-radius:7px;word-break:break-all;line-height:1.3;border:1px solid var(--border)}
+.udm-actions{display:flex;flex-direction:column;gap:7px;margin-top:8px}
+.udm-act{padding:11px 12px;border-radius:9px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;text-align:center;border:1.5px solid;background:transparent}
+.udm-act-block{border-color:rgba(245,158,11,.4);color:var(--orange)}
+.udm-act-block:hover{background:rgba(245,158,11,.08)}
+.udm-act-unblock{border-color:rgba(16,185,129,.4);color:var(--green2)}
+.udm-act-unblock:hover{background:rgba(16,185,129,.08)}
+.udm-act-reset{border-color:rgba(6,182,212,.4);color:var(--cyan)}
+.udm-act-reset:hover{background:rgba(6,182,212,.08)}
+.udm-act-delete{border-color:rgba(239,68,68,.4);color:var(--red2)}
+.udm-act-delete:hover{background:rgba(239,68,68,.08)}
+
+/* ── Toggle tema manual (opcional, esquina superior) ── */
+.theme-toggle{background:transparent;border:1px solid var(--border);color:var(--text2);padding:5px 10px;border-radius:7px;font-size:11px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:5px;transition:all .15s;margin-right:8px}
+.theme-toggle:hover{border-color:var(--blue2);color:var(--blue2)}
 </style>
 </head>
 <body>
@@ -105,7 +223,13 @@ select{background:var(--bg3);border:1px solid var(--border);border-radius:8px;pa
   </div>
 
   <div class="content">
-    <!-- Agregar usuario -->
+
+    <div class="stats-row">
+      <div class="stat-card blue"><div class="stat-lbl">Usuarios</div><div class="stat-val" id="sTot">0</div></div>
+      <div class="stat-card green"><div class="stat-lbl">Activos</div><div class="stat-val" id="sAct">0</div></div>
+      <div class="stat-card red"><div class="stat-lbl">Bloqueados</div><div class="stat-val" id="sBlq">0</div></div>
+    </div>
+
     <div>
       <div class="section-title">Nuevo usuario</div>
       <div class="add-card">
@@ -123,10 +247,68 @@ select{background:var(--bg3);border:1px solid var(--border);border-radius:8px;pa
       </div>
     </div>
 
-    <!-- Lista de usuarios -->
     <div>
       <div class="section-title">Usuarios</div>
-      <div id="usersList"><div class="loading">Cargando usuarios...</div></div>
+      <div class="pills">
+        <button class="pill active" data-filter="all">Todos <span class="count" id="cAll">0</span></button>
+        <button class="pill" data-filter="active">Activos <span class="count" id="cAct">0</span></button>
+        <button class="pill" data-filter="blocked">Bloqueados <span class="count" id="cBlq">0</span></button>
+      </div>
+      <div id="usersList" class="users-list"><div class="loading">Cargando usuarios...</div></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- USER DETAIL MODAL -->
+<div class="udm" id="userModal">
+  <div class="udm-box">
+    <div class="udm-hero">
+      <button class="udm-close" id="udmClose">✕</button>
+      <div class="udm-av" id="udmAv">--</div>
+      <div class="udm-mail" id="udmMail">email@ejemplo.com</div>
+      <div class="udm-meta">
+        <span class="ubadge user" id="udmRole">Usuario</span>
+        <span class="udm-status" id="udmStatus">Activo</span>
+      </div>
+    </div>
+    <div class="udm-body">
+      <div class="udm-stats">
+        <div class="udm-stat"><div class="udm-stat-val" id="udmMsgsHoy">0</div><div class="udm-stat-lbl">Hoy</div><div class="udm-stat-sub">DM enviados</div></div>
+        <div class="udm-stat"><div class="udm-stat-val" id="udmMsgsTotal">0</div><div class="udm-stat-lbl">Total</div><div class="udm-stat-sub">DM enviados</div></div>
+        <div class="udm-stat"><div class="udm-stat-val" id="udmLastSeen">—</div><div class="udm-stat-lbl">Última</div><div class="udm-stat-sub">conexión</div></div>
+      </div>
+
+      <div class="udm-section">
+        <div class="udm-section-t">Actividad · 7 días</div>
+        <div class="udm-heatmap" id="udmHeatmap"></div>
+      </div>
+
+      <div class="udm-section">
+        <div class="udm-section-t">Límite diario</div>
+        <div class="udm-limit-row">
+          <label>Mensajes/día</label>
+          <input type="number" class="udm-limit-input" id="udmLimit" min="1" max="9999">
+        </div>
+      </div>
+
+      <div class="udm-section">
+        <div class="udm-section-t">Permisos</div>
+        <div class="udm-perm-row"><div><div class="udm-perm-lbl">Extracción Leads</div><div class="udm-perm-sub">Scraping de perfiles</div></div><button class="udm-switch" id="udmBD"></button></div>
+        <div class="udm-perm-row"><div><div class="udm-perm-lbl">Enriquecimiento</div><div class="udm-perm-sub">Filtrado de leads</div></div><button class="udm-switch" id="udmEnr"></button></div>
+        <div class="udm-perm-row"><div><div class="udm-perm-lbl">Bot DM</div><div class="udm-perm-sub">Envío automático de DMs</div></div><button class="udm-switch" id="udmDM"></button></div>
+      </div>
+
+      <div class="udm-section" id="udmDeviceWrap" style="display:none">
+        <div class="udm-section-t">Dispositivo vinculado</div>
+        <div class="udm-device" id="udmDevice"></div>
+      </div>
+
+      <div class="udm-actions">
+        <button class="udm-act udm-act-block" id="udmBlock">🚫 Bloquear usuario</button>
+        <button class="udm-act udm-act-reset" id="udmReset" style="display:none">🖥 Desvincular dispositivo</button>
+        <button class="udm-act udm-act-delete" id="udmDelete">🗑 Eliminar usuario</button>
+      </div>
     </div>
   </div>
 </div>
@@ -151,6 +333,15 @@ function parseDoc(doc){
     else if(f.booleanValue!==undefined) obj[k]=f.booleanValue;
     else if(f.integerValue!==undefined) obj[k]=parseInt(f.integerValue);
     else if(f.doubleValue!==undefined) obj[k]=f.doubleValue;
+    else if(f.mapValue!==undefined && f.mapValue.fields){
+      var m={};
+      Object.keys(f.mapValue.fields).forEach(function(mk){
+        var mf=f.mapValue.fields[mk];
+        if(mf.integerValue!==undefined) m[mk]=parseInt(mf.integerValue);
+        else if(mf.stringValue!==undefined) m[mk]=mf.stringValue;
+      });
+      obj[k]=m;
+    }
   });
   return obj;
 }
@@ -189,6 +380,25 @@ function toast(msg){
   setTimeout(function(){ t.classList.remove('show'); },2200);
 }
 
+// ── Utils ──
+function esc(s){ var d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+function fmtLastSeen(iso){
+  if(!iso) return '—';
+  var diff=Date.now()-new Date(iso).getTime();
+  if(diff<0) return 'recién';
+  var m=Math.floor(diff/60000), h=Math.floor(diff/3600000), d=Math.floor(diff/86400000);
+  if(m<1) return 'recién';
+  if(m<60) return 'hace '+m+'m';
+  if(h<24) return 'hace '+h+'h';
+  if(d<7) return 'hace '+d+'d';
+  return new Date(iso).toLocaleDateString('es-AR',{day:'2-digit',month:'2-digit'});
+}
+function avatarColor(email){
+  var s=(email||'').toLowerCase(); var h=0;
+  for(var i=0;i<s.length;i++) h=(h*31+s.charCodeAt(i))%5;
+  return 'c'+(h+1);
+}
+
 // ── Auth ──
 document.getElementById('loginBtn').addEventListener('click',function(){
   var e=document.getElementById('adminEmail').value.trim();
@@ -217,23 +427,25 @@ document.getElementById('addBtn').addEventListener('click',function(){
   var errEl=document.getElementById('addErr');
   if(!email||!pass){ errEl.textContent='Completa email y contraseña'; return; }
   errEl.textContent='';
-  document.getElementById('addBtn').textContent='Creando...';
-  document.getElementById('addBtn').disabled=true;
+  var btn=document.getElementById('addBtn');
+  btn.textContent='Creando...'; btn.disabled=true;
   fbList('usuarios').then(function(users){
     var existe=users.find(function(u){ return u.email===email.toLowerCase(); });
-    if(existe){ errEl.textContent='Ese email ya existe'; document.getElementById('addBtn').textContent='Crear usuario'; document.getElementById('addBtn').disabled=false; return; }
+    if(existe){ errEl.textContent='Ese email ya existe'; btn.textContent='Crear usuario'; btn.disabled=false; return; }
     var id='u_'+Date.now()+'_'+Math.random().toString(36).substr(2,6);
     var data={email:email.toLowerCase(),password:pass,role:role,activo:true,limite:limite,creado:new Date().toISOString(),botDM:true,botBD:true,botEnrich:true};
     data[_$x('e{Vmn')]=true;
     fbPatch('usuarios/'+id, toFields(data)).then(function(res){
-      document.getElementById('addBtn').textContent='Crear usuario'; document.getElementById('addBtn').disabled=false;
+      btn.textContent='Crear usuario'; btn.disabled=false;
       if(res.error){ errEl.textContent=res.error.message||'Error'; return; }
       document.getElementById('nEmail').value=''; document.getElementById('nPass').value=''; document.getElementById('nLimite').value='';
-      toast('✅ Usuario creado');
-      loadUsers();
+      toast('✅ Usuario creado'); loadUsers();
     });
   });
 });
+
+// ── Estado ──
+var _users=[], _filter='all';
 
 // ── Load & render users ──
 function loadUsers(){
@@ -241,75 +453,166 @@ function loadUsers(){
   list.innerHTML='<div class="loading">Cargando...</div>';
   fbList('usuarios').then(function(users){
     users=users.filter(function(u){ return u&&u._id; });
+    _users=users;
+    var act=users.filter(function(u){ return u.activo!==false; }).length;
+    var blq=users.length-act;
     document.getElementById('userCount').textContent=users.length+' usuario'+(users.length!==1?'s':'');
-    if(!users.length){ list.innerHTML='<div class="loading">Sin usuarios.</div>'; return; }
-    list.innerHTML='';
-    users.forEach(function(u){
-      var activo=u.activo!==false;
-      var dmOn=u.botDM!==false, bdOn=u.botBD!==false, enrOn=u.botEnrich!==false;
-      var limite=u.limite||80;
-      var card=document.createElement('div'); card.className='user-card';
-      card.innerHTML=
-        '<div class="user-top">'+
-          '<div class="uav">'+esc((u.email||'?').substring(0,2).toUpperCase())+'</div>'+
-          '<div class="uinfo">'+
-            '<div class="uemail">'+esc(u.email||u._id)+'</div>'+
-            '<div class="umeta"><span class="udot '+(activo?'on':'off')+'"></span>'+esc(u.role||'user')+(u.deviceId?'&nbsp;·&nbsp;🖥 vinculado':'')+'</div>'+
-          '</div>'+
-        '</div>'+
-        '<div class="user-actions">'+
-          '<div class="ulim-row"><input class="ulim-inp" type="number" value="'+limite+'" min="1" max="9999"><button class="confirm-btn lim-btn" data-id="'+esc(u._id)+'">✓</button></div>'+
-          '<div class="mods">'+
-            '<button class="mmod '+(dmOn?'on':'off')+'" data-id="'+esc(u._id)+'" data-mod="botDM" data-val="'+(dmOn?'1':'0')+'">DM</button>'+
-            '<button class="mmod '+(bdOn?'on':'off')+'" data-id="'+esc(u._id)+'" data-mod="botBD" data-val="'+(bdOn?'1':'0')+'">BD</button>'+
-            '<button class="mmod '+(enrOn?'on':'off')+'" data-id="'+esc(u._id)+'" data-mod="botEnrich" data-val="'+(enrOn?'1':'0')+'" title="Enriquecer leads">FILT</button>'+
-          '</div>'+
-          '<button class="btn-'+(activo?'warn':'green')+' tog-btn" data-id="'+esc(u._id)+'" data-activo="'+(activo?'1':'0')+'">'+(activo?'Bloquear':'Activar')+'</button>'+
-          (u.deviceId?'<button class="btn-cyan rst-btn" data-id="'+esc(u._id)+'">🖥 Reset PC</button>':'')+
-          '<button class="btn-danger del-btn" data-id="'+esc(u._id)+'">✕</button>'+
-        '</div>';
-      list.appendChild(card);
-      // Limit save
-      card.querySelector('.lim-btn').addEventListener('click',function(){
-        var inp=this.closest('.ulim-row').querySelector('.ulim-inp');
-        var lim=parseInt(inp.value)||80;
-        var btn=this; btn.textContent='...'; btn.disabled=true;
-        fbPatch('usuarios/'+this.dataset.id,{limite:{integerValue:String(lim)}},'limite').then(function(){
-          btn.textContent='✓'; btn.disabled=false; toast('Límite guardado');
-        });
-      });
-      // Toggle active
-      card.querySelector('.tog-btn').addEventListener('click',function(){
-        var id=this.dataset.id, activo=this.dataset.activo==='1';
-        this.textContent='...'; this.disabled=true;
-        fbPatch('usuarios/'+id,{activo:{booleanValue:!activo}},'activo').then(function(){ toast('Usuario actualizado'); loadUsers(); });
-      });
-      // Delete
-      card.querySelector('.del-btn').addEventListener('click',function(){
-        if(!confirm('¿Eliminar usuario?')) return;
-        fbDelete('usuarios/'+this.dataset.id).then(function(){ toast('Usuario eliminado'); loadUsers(); });
-      });
-      // Reset device
-      var rstBtn=card.querySelector('.rst-btn');
-      if(rstBtn) rstBtn.addEventListener('click',function(){
-        if(!confirm('¿Desvincular este PC?')) return;
-        this.textContent='...'; this.disabled=true;
-        fbPatch('usuarios/'+this.dataset.id,{deviceId:{stringValue:''}},'deviceId').then(function(){ toast('PC desvinculado'); loadUsers(); });
-      });
-      // Toggle modules
-      card.querySelectorAll('.mmod').forEach(function(b){
-        b.addEventListener('click',function(){
-          var id=this.dataset.id, mod=this.dataset.mod, val=this.dataset.val==='1';
-          this.disabled=true;
-          var f={}; f[mod]={booleanValue:!val};
-          fbPatch('usuarios/'+id,f,mod).then(function(){ toast('Módulo actualizado'); loadUsers(); });
-        });
-      });
-    });
+    document.getElementById('sTot').textContent=users.length;
+    document.getElementById('sAct').textContent=act;
+    document.getElementById('sBlq').textContent=blq;
+    document.getElementById('cAll').textContent=users.length;
+    document.getElementById('cAct').textContent=act;
+    document.getElementById('cBlq').textContent=blq;
+    renderList();
   }).catch(function(){ list.innerHTML='<div class="loading" style="color:var(--red2)">Error al cargar usuarios.</div>'; });
 }
 
-function esc(s){ var d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+function renderList(){
+  var list=document.getElementById('usersList');
+  var filtered=_users.filter(function(u){
+    var activo=u.activo!==false;
+    if(_filter==='active' && !activo) return false;
+    if(_filter==='blocked' && activo) return false;
+    return true;
+  });
+  if(!filtered.length){ list.innerHTML='<div class="loading">Sin usuarios.</div>'; return; }
+  list.innerHTML='';
+  filtered.forEach(function(u){
+    var activo=u.activo!==false;
+    var msgsHoy=u.msgsHoy||0;
+    var lastSeen=fmtLastSeen(u.lastSeen);
+    var role=u.role==='admin'?'admin':'user';
+    var roleTxt=u.role==='admin'?'Admin':'Usuario';
+    var card=document.createElement('div');
+    card.className='user-card'+(activo?'':' blocked');
+    card.innerHTML=
+      '<div class="uav '+avatarColor(u.email)+'">'+esc((u.email||'?').substring(0,2).toUpperCase())+'</div>'+
+      '<div class="uinfo">'+
+        '<div class="uemail">'+esc(u.email||u._id)+'</div>'+
+        '<div class="umeta">'+
+          '<span class="ubadge '+role+'">'+roleTxt+'</span>'+
+          '<span class="utime">'+esc(lastSeen)+'</span>'+
+        '</div>'+
+      '</div>'+
+      '<div class="uright">'+
+        '<div><div class="ustat-num">'+msgsHoy+'</div><div class="ustat-lbl">hoy</div></div>'+
+        '<div class="udot '+(activo?'on':'off')+'"></div>'+
+      '</div>';
+    card.addEventListener('click',function(){ openModal(u._id); });
+    list.appendChild(card);
+  });
+}
+
+// ── Pills ──
+document.querySelectorAll('.pill').forEach(function(p){
+  p.addEventListener('click',function(){
+    document.querySelectorAll('.pill').forEach(function(x){ x.classList.remove('active'); });
+    this.classList.add('active');
+    _filter=this.dataset.filter;
+    renderList();
+  });
+});
+
+// ── User detail modal ──
+function setSwitch(id,on){ var el=document.getElementById(id); if(on) el.classList.add('on'); else el.classList.remove('on'); }
+
+function openModal(id){
+  var u=_users.find(function(x){ return x._id===id; });
+  if(!u) return;
+  var activo=u.activo!==false;
+  var av=document.getElementById('udmAv');
+  av.textContent=(u.email||'?').substring(0,2).toUpperCase();
+  document.getElementById('udmMail').textContent=u.email||u._id;
+  var roleEl=document.getElementById('udmRole');
+  roleEl.textContent=u.role==='admin'?'Admin':'Usuario';
+  roleEl.className='ubadge '+(u.role==='admin'?'admin':'user');
+  var st=document.getElementById('udmStatus');
+  st.textContent=activo?'Activo':'Bloqueado';
+  st.className='udm-status'+(activo?'':' off');
+  document.getElementById('udmMsgsHoy').textContent=u.msgsHoy||0;
+  document.getElementById('udmMsgsTotal').textContent=u.msgsTotal||0;
+  document.getElementById('udmLastSeen').textContent=fmtLastSeen(u.lastSeen);
+  document.getElementById('udmLimit').value=u.limite||80;
+  // Heatmap 7 días
+  var hm=document.getElementById('udmHeatmap'); hm.innerHTML='';
+  var hist=u.msgsHistory||{};
+  var lim=u.limite||80;
+  for(var i=6;i>=0;i--){
+    var dt=new Date(); dt.setDate(dt.getDate()-i);
+    var key=dt.toISOString().split('T')[0];
+    var count=hist[key]||0;
+    var cls='';
+    if(count>0 && count<lim) cls='active';
+    else if(count>0) cls='full';
+    var cell=document.createElement('div');
+    cell.className='udm-day '+cls;
+    cell.title=key+' · '+count+' msgs';
+    cell.innerHTML='<div class="udm-day-num">'+dt.getDate()+'</div><div class="udm-day-cnt">'+(count>0?count:'·')+'</div>';
+    hm.appendChild(cell);
+  }
+  // Switches
+  setSwitch('udmBD', u.botBD!==false);
+  setSwitch('udmEnr', u.botEnrich!==false);
+  setSwitch('udmDM', u.botDM!==false);
+  // Device
+  if(u.deviceId){
+    document.getElementById('udmDeviceWrap').style.display='';
+    document.getElementById('udmDevice').textContent=u.deviceId;
+    document.getElementById('udmReset').style.display='';
+  } else {
+    document.getElementById('udmDeviceWrap').style.display='none';
+    document.getElementById('udmReset').style.display='none';
+  }
+  // Block button
+  var blockBtn=document.getElementById('udmBlock');
+  blockBtn.textContent=activo?'🚫 Bloquear usuario':'✓ Activar usuario';
+  blockBtn.className='udm-act '+(activo?'udm-act-block':'udm-act-unblock');
+  blockBtn.onclick=function(){
+    blockBtn.disabled=true;
+    fbPatch('usuarios/'+id,{activo:{booleanValue:!activo}},'activo').then(function(){
+      toast(activo?'Usuario bloqueado':'Usuario activado');
+      closeModal(); loadUsers();
+    });
+  };
+  document.getElementById('udmReset').onclick=function(){
+    if(!confirm('¿Desvincular dispositivo?')) return;
+    fbPatch('usuarios/'+id,{deviceId:{stringValue:''}},'deviceId').then(function(){
+      toast('Dispositivo desvinculado'); closeModal(); loadUsers();
+    });
+  };
+  document.getElementById('udmDelete').onclick=function(){
+    if(!confirm('¿Eliminar a "'+(u.email||id)+'" definitivamente?')) return;
+    fbDelete('usuarios/'+id).then(function(){
+      toast('Usuario eliminado'); closeModal(); loadUsers();
+    });
+  };
+  // Limit inline edit con debounce
+  var limInp=document.getElementById('udmLimit');
+  limInp.oninput=function(){
+    clearTimeout(limInp._t);
+    limInp._t=setTimeout(function(){
+      var v=Math.max(1,parseInt(limInp.value)||80);
+      fbPatch('usuarios/'+id,{limite:{integerValue:String(v)}},'limite').then(function(){
+        toast('Límite actualizado: '+v); loadUsers();
+      });
+    },600);
+  };
+  // Switches permisos
+  [['udmDM','botDM'],['udmBD','botBD'],['udmEnr','botEnrich']].forEach(function(p){
+    var sid=p[0], mod=p[1];
+    document.getElementById(sid).onclick=function(){
+      var on=document.getElementById(sid).classList.contains('on');
+      setSwitch(sid,!on);
+      var f={}; f[mod]={booleanValue:!on};
+      fbPatch('usuarios/'+id,f,mod).then(function(){ toast('Permiso actualizado'); loadUsers(); });
+    };
+  });
+  document.getElementById('userModal').classList.add('open');
+}
+
+function closeModal(){ document.getElementById('userModal').classList.remove('open'); }
+document.getElementById('udmClose').addEventListener('click',closeModal);
+document.getElementById('userModal').addEventListener('click',function(e){ if(e.target===this) closeModal(); });
 </script>
 </body>
 </html>
