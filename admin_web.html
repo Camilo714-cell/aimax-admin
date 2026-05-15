@@ -565,6 +565,7 @@ function openModal(id){
   }
   // Block button
   var blockBtn=document.getElementById('udmBlock');
+  blockBtn.disabled=false; // reset estado de clicks previos
   blockBtn.textContent=activo?'🚫 Bloquear usuario':'✓ Activar usuario';
   blockBtn.className='udm-act '+(activo?'udm-act-block':'udm-act-unblock');
   blockBtn.onclick=function(){
@@ -574,14 +575,18 @@ function openModal(id){
       closeModal(); loadUsers();
     });
   };
-  document.getElementById('udmReset').onclick=function(){
+  var resetBtn=document.getElementById('udmReset'); resetBtn.disabled=false;
+  resetBtn.onclick=function(){
     if(!confirm('¿Desvincular dispositivo?')) return;
+    resetBtn.disabled=true;
     fbPatch('usuarios/'+id,{deviceId:{stringValue:''}},'deviceId').then(function(){
       toast('Dispositivo desvinculado'); closeModal(); loadUsers();
     });
   };
-  document.getElementById('udmDelete').onclick=function(){
+  var delBtn=document.getElementById('udmDelete'); delBtn.disabled=false;
+  delBtn.onclick=function(){
     if(!confirm('¿Eliminar a "'+(u.email||id)+'" definitivamente?')) return;
+    delBtn.disabled=true;
     fbDelete('usuarios/'+id).then(function(){
       toast('Usuario eliminado'); closeModal(); loadUsers();
     });
