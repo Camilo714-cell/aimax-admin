@@ -481,8 +481,9 @@ function renderList(){
     var activo=u.activo!==false;
     var msgsHoy=u.msgsHoy||0;
     var lastSeen=fmtLastSeen(u.lastSeen);
-    var role=u.role==='admin'?'admin':'user';
-    var roleTxt=u.role==='admin'?'Admin':'Usuario';
+    var esLiderRow=(u.email===ADMIN_EMAIL);
+    var role=esLiderRow||u.role==='admin'?'admin':'user';
+    var roleTxt=esLiderRow?'👑 Líder':(u.role==='admin'?'Admin':'Usuario');
     var card=document.createElement('div');
     card.className='user-card'+(activo?'':' blocked');
     card.innerHTML=
@@ -523,9 +524,10 @@ function openModal(id){
   var av=document.getElementById('udmAv');
   av.textContent=(u.email||'?').substring(0,2).toUpperCase();
   document.getElementById('udmMail').textContent=u.email||u._id;
+  var esLiderModal=(u.email===ADMIN_EMAIL);
   var roleEl=document.getElementById('udmRole');
-  roleEl.textContent=u.role==='admin'?'Admin':'Usuario';
-  roleEl.className='ubadge '+(u.role==='admin'?'admin':'user');
+  roleEl.textContent=esLiderModal?'👑 Líder':(u.role==='admin'?'Admin':'Usuario');
+  roleEl.className='ubadge '+(esLiderModal||u.role==='admin'?'admin':'user');
   var st=document.getElementById('udmStatus');
   st.textContent=activo?'Activo':'Bloqueado';
   st.className='udm-status'+(activo?'':' off');
@@ -563,18 +565,26 @@ function openModal(id){
     document.getElementById('udmDeviceWrap').style.display='none';
     document.getElementById('udmReset').style.display='none';
   }
+  var esLider=(u.email===ADMIN_EMAIL);
   // Block button
   var blockBtn=document.getElementById('udmBlock');
-  blockBtn.disabled=false; // reset estado de clicks previos
-  blockBtn.textContent=activo?'🚫 Bloquear usuario':'✓ Activar usuario';
-  blockBtn.className='udm-act '+(activo?'udm-act-block':'udm-act-unblock');
-  blockBtn.onclick=function(){
-    blockBtn.disabled=true;
-    fbPatch('usuarios/'+id,{activo:{booleanValue:!activo}},'activo').then(function(){
-      toast(activo?'Usuario bloqueado':'Usuario activado');
-      closeModal(); loadUsers();
-    });
-  };
+  blockBtn.disabled=false;
+  if(esLider){
+    blockBtn.textContent='👑 Líder protegido'; blockBtn.disabled=true;
+    blockBtn.style.opacity='.55'; blockBtn.style.cursor='not-allowed';
+    blockBtn.onclick=null;
+  } else {
+    blockBtn.style.opacity=''; blockBtn.style.cursor='';
+    blockBtn.textContent=activo?'🚫 Bloquear usuario':'✓ Activar usuario';
+    blockBtn.className='udm-act '+(activo?'udm-act-block':'udm-act-unblock');
+    blockBtn.onclick=function(){
+      blockBtn.disabled=true;
+      fbPatch('usuarios/'+id,{activo:{booleanValue:!activo}},'activo').then(function(){
+        toast(activo?'Usuario bloqueado':'Usuario activado');
+        closeModal(); loadUsers();
+      });
+    };
+  }
   var resetBtn=document.getElementById('udmReset'); resetBtn.disabled=false;
   resetBtn.onclick=function(){
     if(!confirm('¿Desvincular dispositivo?')) return;
@@ -584,13 +594,32 @@ function openModal(id){
     });
   };
   var delBtn=document.getElementById('udmDelete'); delBtn.disabled=false;
-  delBtn.onclick=function(){
-    if(!confirm('¿Eliminar a "'+(u.email||id)+'" definitivamente?')) return;
+  if(esLider){
+    delBtn.textContent='🔒 No se puede eliminar al líder';
     delBtn.disabled=true;
-    fbDelete('usuarios/'+id).then(function(){
-      toast('Usuario eliminado'); closeModal(); loadUsers();
-    });
-  };
+    delBtn.style.opacity='.55'; delBtn.style.cursor='not-allowed';
+    delBtn.onclick=null;
+  } else {
+    delBtn.style.opacity=''; delBtn.style.cursor='';
+    delBtn.textContent='🗑 Eliminar usuario';
+    delBtn.onclick=function(){
+      if(!confirm('¿Eliminar a "'+(u.email||id)+'" definitivamente?')) return;
+      delBtn.disabled=true;
+      fbDelete('usuarios/'+id).then(function(){
+        toast('Usuario eliminado'); closeModal(); loadUsers();
+      });
+    };
+  }
+  // Switches y límite deshabilitados para líder
+  ['udmDM','udmBD','udmEnr'].forEach(function(sid){
+    var el=document.getElementById(sid); if(!el) return;
+    el.style.opacity=esLider?'.55':'';
+    el.style.cursor=esLider?'not-allowed':'';
+    el.disabled=esLider;
+  });
+  var limInpEl=document.getElementById('udmLimit');
+  limInpEl.disabled=esLider;
+  limInpEl.style.opacity=esLider?'.55':'';
   // Limit inline edit con debounce
   var limInp=document.getElementById('udmLimit');
   limInp.oninput=function(){
